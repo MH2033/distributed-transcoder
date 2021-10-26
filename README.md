@@ -4,15 +4,15 @@ A straightforward project structure for developing C++ applications using CMake
 
 ## Directory Structure
 
- -  **include**
+ -  **include**   
  Contains all public include files
  
- - **lib**
+ - **lib**   
  All external dependencies that should be compiled with the project are placed here. Static libraries can also reside in this directory
 
-- **src**
+- **src**   
 	Contains all project source files
 
 
-**Note :** 
+**Note :**   
  All the mentioned directories can also contain sub-directories if needed
