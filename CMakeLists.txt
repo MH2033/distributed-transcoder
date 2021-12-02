@@ -14,8 +14,12 @@ file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp
     )
 
 #Add all header files located include to headers list
-include_directories(${PROJECT_SOURCE_DIR}/include
-                    ${GST_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories("/usr/include/gstreamer-1.0")
+include_directories("/usr/include/glib-2.0")
+include_directories("/usr/lib/aarch64-linux-gnu/glib-2.0/include")
+include_directories("/usr/lib/aarch64-linux-gnu/gstreamer-1.0/include")
+include_directories("/usr/lib/x86_64-linux-gnu/glib-2.0/include")
 
 #Setting target name
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
