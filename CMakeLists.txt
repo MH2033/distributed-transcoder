@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(dtrancoder VERSION 0.1.0)
 
+#find MPI
+find_package(MPI REQUIRED)
+include_directories(SYSTEM ${MPI_INCLUDE_PATH})
+
 #Find and link to gst-lib
 find_package(PkgConfig) 
 pkg_search_module(GLIB REQUIRED glib-2.0) 
@@ -27,6 +31,8 @@ add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${GST_APP_LIBRARIES}
                       ${GST_VIDEO_LIBRARIES}
+                      ${MPI_CXX_LIBRARIES}
+                      pthread
                       )
 
 
