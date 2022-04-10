@@ -1,5 +1,5 @@
 #ifndef WORKER_NODE_HPP
 #define WORKER_NODE_HPP
-void run_worker();
+void run_worker(EncodeType);
 
 #endif

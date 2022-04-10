@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <math.h>
 #include <thread>
+#include <map>
 #include "transcoder.hpp"
 #include "mpi_conf.hpp"
 
@@ -69,15 +70,32 @@ static gboolean bus_call(GstBus *bus, GstMessage *msg, gpointer data){
 
 }
 
-void transcode(std::string input_file_name, std::string output_file_name){
+void transcode(string input_file_name, string output_file_name, EncodeType encode_type){
   cout << "File to transcode: " << input_file_name << endl;
   cout << "Output file: " << output_file_name << endl;
 
+  map<EncodeType, string> encoder_name_map;
+  encoder_name_map.insert({EncodeType::H264, "h264"});
+  encoder_name_map.insert({EncodeType::H265, "h265"});
+  encoder_name_map.insert({EncodeType::VP8, "vp8"});
+  encoder_name_map.insert({EncodeType::VP9, "vp9"});
+  string muxer = (encode_type == EncodeType::H264 || encode_type == EncodeType::H265)?"qtmux":"webmmux";
+  string parser = "";
+  switch(encode_type){
+    case EncodeType::H264:
+      parser = "! h264parse !";
+      break;
+    
+    case EncodeType::H265:
+      parser = "! h265parse !";
+      break;
+  }
+  
   gst_init(NULL, NULL);
   // auto pipeline = gst_parse_launch("appsrc do-timestamp=true name=src format=4 is-live=true ! queue ! h264parse ! nvv4l2decoder enable-max-performance=true ! nvv4l2h265enc insert-sps-pps=true insert-aud=true insert-vui=true maxperf-enable=true ! h265parse ! appsink name=sink emit-signals=true sync=false", NULL);
   // bitrate=$bitrate preset-level=$preset profile=$profile control-rate=$bitrateType peak-bitrate=$peakBitrate insert-sps-pps=true insert-aud=true insert-vui=true maxperf-enable=true
-  string gst_launch_str = "filesrc name=src location=" + input_file_name + " ! queue ! qtdemux name=demux qtmux name=mux ! filesink location=" + output_file_name + " \
-                                    demux. ! queue ! h264parse ! nvv4l2decoder enable-max-performance=true ! nvv4l2h265enc insert-sps-pps=true insert-aud=true insert-vui=true maxperf-enable=true ! h265parse ! mux. \
+  string gst_launch_str = "filesrc name=src location=" + input_file_name + " ! queue ! qtdemux name=demux " + muxer + " name=mux ! filesink location=" + output_file_name + " \
+                                    demux. ! queue ! h264parse ! nvv4l2decoder enable-max-performance=true ! nvv4l2" + encoder_name_map.at(encode_type) + "enc insert-sps-pps=true insert-aud=true insert-vui=true maxperf-enable=true " + parser + " mux. \
                                     demux. ! queue ! mpegaudioparse ! mux.";
   GstElement *pipeline = gst_parse_launch(gst_launch_str.c_str(), NULL);
   GstBus *bus = gst_pipeline_get_bus (GST_PIPELINE (pipeline));

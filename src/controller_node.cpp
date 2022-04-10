@@ -12,7 +12,7 @@ using namespace std;
 void scatter_file(string path, int num_chunks);
 void assemble_files();
 
-void run_controller(string filepath, int cluster_size){
+void run_controller(string filepath, int cluster_size, EncodeType encode_type){
   scatter_file(filepath, cluster_size);
   string chunk_list_file_name = "./chunks.txt";
   ofstream chunk_list;
@@ -28,7 +28,7 @@ void run_controller(string filepath, int cluster_size){
   char chunk_name[1000];
   sprintf(chunk_name, "%s_%05d", filepath.c_str(), 0);
 
-  transcode(chunk_name, string(chunk_name) + ".out");
+  transcode(chunk_name, string(chunk_name) + ".out", encode_type);
   MPI_Barrier(MPI_COMM_WORLD);
   cout << "Barrier reached" << endl;
   //Merge the scattered files
