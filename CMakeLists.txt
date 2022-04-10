@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(dtrancoder VERSION 0.1.0)
 
+#find boost program options
+find_package(Boost 1.65 COMPONENTS program_options REQUIRED)
+
 #find MPI
 find_package(MPI REQUIRED)
 include_directories(SYSTEM ${MPI_INCLUDE_PATH})
@@ -18,6 +21,7 @@ file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp
     )
 
 #Add all header files located include to headers list
+include_directories(${Boost_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories("/usr/include/gstreamer-1.0")
 include_directories("/usr/include/glib-2.0")
@@ -32,6 +36,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${GST_APP_LIBRARIES}
                       ${GST_VIDEO_LIBRARIES}
                       ${MPI_CXX_LIBRARIES}
+                      ${Boost_LIBRARIES}
                       pthread
                       )
 
