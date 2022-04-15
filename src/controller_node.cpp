@@ -32,7 +32,8 @@ void run_controller(string filepath, int cluster_size, EncodeType encode_type){
   MPI_Barrier(MPI_COMM_WORLD);
   cout << "Barrier reached" << endl;
   //Merge the scattered files
-  string ffmpeg_command = "ffmpeg -f concat -safe 0 -i " + chunk_list_file_name + " -c copy " + filepath + ".out.mp4";
+  string file_extention = "mkv";
+  string ffmpeg_command = "ffmpeg -f concat -safe 0 -i " + chunk_list_file_name + " -c copy " + filepath + ".out." + file_extention;
   if(system(ffmpeg_command.c_str()) != 0)
     cout << "Failed to assemble files" << endl;
 }
