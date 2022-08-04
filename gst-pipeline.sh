@@ -20,3 +20,7 @@ demux. ! queue ! mpegaudioparse ! mux. & PID2=$!
 
 wait $PID1
 wait $PID2
+
+gst-launch-1.0 filesrc location=bbb_sunflower_1080p_30fps_short.mp4 ! qtdemux name=demux matroskamux name=mux ! filesink location=out_00001_vp8.webm \
+demux. ! queue ! h264parse ! nvv4l2decoder enable-max-performance=true ! nvv4l2vp8enc maxperf-enable=true ! mux. \
+demux. ! queue ! mpegaudioparse ! mux.
