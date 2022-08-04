@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.0)
-project(dtrancoder VERSION 0.1.0)
+project(dtrancoder VERSION 0.8.0)
 
 #find boost program options
 find_package(Boost 1.65 COMPONENTS program_options REQUIRED)
@@ -39,6 +39,3 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                       ${Boost_LIBRARIES}
                       pthread
                       )
-
-
-
